@@ -6,7 +6,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import entitys.Player;
-import main.tt;
+import main.Game;
 
 public class UI {
 	
@@ -15,22 +15,23 @@ public class UI {
 	public static boolean visible = true;
 
 	private Player p;
-	private tt t;
-	private int timer;
+	private Game game;
+	private int timer = 0;
+	private static int FPS;
 	
 	
 	public UI() {
 		
 	}
-	public UI(tt t,Player p) {
+	public UI(Game game,Player p) {
 		this.p = p;
-		this.t = t;
+		this.game = game;
 		health = p.getHealth();
 		
 	}
 	
 	public void update() {
-		GameTimer();
+		timer++;
 
 	}
 	
@@ -41,10 +42,11 @@ public class UI {
 		if(p.isStats()) {
 			g.drawString(p.getX()+","+p.getY(),20,50);
 			g.drawString("Timer: "+timer, 20, 70);
+			g.drawString("Fps: "+FPS, 20, 90);
 		}
 		
 	
-//		drawDialogueScreen(g);
+
 	}
 	
 	public void playerHealth(Graphics g) {
@@ -89,12 +91,10 @@ public class UI {
 		}
 	}
 	
-	public void GameTimer() {
-		
-		timer = (int) System.nanoTime();
-		
-	}
 
+	public static void fps(int fps) {
+		FPS = fps;
+	}
 	
 	
 }

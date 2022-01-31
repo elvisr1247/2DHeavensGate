@@ -3,7 +3,7 @@ package state;
 import java.awt.Graphics;
 
 import gfx.Camera;
-import main.tt;
+import main.Game;
 import map.Map;
 
 
@@ -15,9 +15,9 @@ public class GameState extends State {
 	private Map m;
 
 	
-	public GameState(tt t) {
-		super(t);
-		m = new Map(t);
+	public GameState(Game game) {
+		super(game);
+		m = new Map(game);
 		
 	}
 

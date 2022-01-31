@@ -15,7 +15,13 @@ public class Tiles {
 		public static final int TILESIZE = 64;
 		
 		public BufferedImage texture;
-		public int x,y,width,height;
+		public int x;
+
+		public int y;
+
+		public int width;
+
+		public int height;
 		
 		
 

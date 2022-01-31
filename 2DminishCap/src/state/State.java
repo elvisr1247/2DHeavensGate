@@ -2,7 +2,7 @@ package state;
 
 import java.awt.Graphics;
 
-import main.tt;
+import main.Game;
 
 public abstract class State {
 
@@ -20,10 +20,10 @@ public abstract class State {
 	
 	//CLASS
 	
-	protected tt t;
+	protected Game game;
 	
-	public State(tt t) {
-		this.t = t;
+	public State(Game game) {
+		this.game = game;
 	}
 	
 	public abstract void update();

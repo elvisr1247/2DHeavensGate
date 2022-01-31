@@ -6,7 +6,7 @@ import java.awt.event.KeyListener;
 public class KeyManager implements KeyListener {
     //keys
     public boolean up = false,down = false,
-            right = false,left = false,attack = false,
+            right = false,left = false,attack = false,run = false,
             enter = false;
     @Override
     public void keyTyped(KeyEvent e) {
@@ -29,6 +29,8 @@ public class KeyManager implements KeyListener {
             left = true;
         }else if(e.getKeyCode() == KeyEvent.VK_E) {
              attack = true;
+        }else if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
+        	run = true;
         }else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
         	enter = true;
         }
@@ -49,8 +51,10 @@ public class KeyManager implements KeyListener {
             left = false;
         }else if(e.getKeyCode() == KeyEvent.VK_E) {
             attack = false;
+       }else if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
+       		run = true;
        }else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-       	enter = true;
+       		enter = true;
        }
         
     }

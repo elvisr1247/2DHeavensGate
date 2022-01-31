@@ -5,8 +5,10 @@ package entitys;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import main.tt;
+import main.Game;
 import map.Map;
+import tiles.TileType;
+import tiles.Tiles;
 
 
 
@@ -22,15 +24,17 @@ public abstract class GameObject {
   
   int size = 64;
 
-  
-  public int speed = 3;
+  public int DEFAULTSPEED = 3;
+  public int speed = DEFAULTSPEED;
+  int maxSpeed = 5;
 
-  protected tt t;
+  protected Game game;
+  protected Tiles tiles;
   
-  public GameObject(tt t, int x , int y){
+  public GameObject(Game game, int x , int y){
       this.x = x;
       this.y = y;
-      this.t = t;
+      this.game = game;
   }
 
   public abstract void update();
@@ -43,13 +47,34 @@ public abstract class GameObject {
   }
   
   public void moveX() {
-	  x+=xMove;
+	  
+	  if(xMove > 0) {//right movement
+		  int tx = (int)(x+xMove + rect.x + rect.width)/64;
+		  if(!collision(tx,(int)(y+rect.y)/64)) {
+			  x+=xMove;
+		  }
+	  }else  if(xMove > 0){//left movement
+		  
+	  }
   }
   
   public void moveY() {
   	y += yMove;
   }
+  
+  public boolean collision(int x,int y) {
+	  Tiles t = new Map(game).map[x][y];
+	  boolean brick = TileType.Brick.solid;
+	  boolean tree = TileType.Tree.solid;
+	  	
+	  if(brick||tree)
+	  	return true;
+	  else
+	  	return false;
 	
+  }
+  
+  
   public float getX() {
       return x;
   }

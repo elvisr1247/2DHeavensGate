@@ -2,10 +2,10 @@ package entitys;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import main.tt;
+import main.Game;
+import tiles.Tiles;
 
 
 
@@ -15,9 +15,9 @@ public class Player extends GameObject {
     private boolean attackActive = false;
     private boolean stats = false;
     private int count = 0;
-
-    public Player(tt t, int x, int y) {
-        super(t, x, y);    
+  
+    public Player(Game game, int x, int y) {
+        super(game, x, y);    
         rect = new Rectangle(18,38,27,25);      
         arect = new Rectangle(80,25,15,30);
     }
@@ -26,28 +26,42 @@ public class Player extends GameObject {
     public void update() {
 
     	xMove = 0;
-        yMove = 0;     
-        if(!(t.getKeyManager()==null))
-        if(t.getKeyManager().up){
+        yMove = 0;   
+        
+        if(!(game.getKeyManager()==null))
+        	
+        if(game.getKeyManager().up){
             direction = "up";
             yMove -= speed;
-        }else if(t.getKeyManager().down){
+        }else if(game.getKeyManager().down){
         	direction = "down";
         	yMove += speed;
-        }else if(t.getKeyManager().right){
+        }else if(game.getKeyManager().right){
             direction = "right";
             xMove += speed;
-        }else if(t.getKeyManager().left){
+        }else if(game.getKeyManager().left){
             direction = "left";
             xMove -= speed;
         }
+        if(game.getKeyManager().run && game.getKeyManager().up ||
+        		game.getKeyManager().run && game.getKeyManager().down ||
+        		game.getKeyManager().run && game.getKeyManager().right ||
+        		game.getKeyManager().run && game.getKeyManager().left) {
+        	if(maxSpeed >= speed)
+        		speed++; 
+        }else {
+        	speed = DEFAULTSPEED;
+        }
         
-        if(t.getKeyManager().enter) count++;
+        if(game.getKeyManager().enter) count++;
         onorOff();
         
-        if(t.getKeyManager().attack)attackActive = true;
+        if(game.getKeyManager().attack)attackActive = true;
         else attackActive = false;
     	
+//        System.out.println(speed);
+//        collisdes();
+//        collisdes(tiles);
     	 move();   
     }
     

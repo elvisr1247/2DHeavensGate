@@ -4,15 +4,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-import main.tt;
+import main.Game;
 
 public class npc extends GameObject {
 
-	private tt t;
+	private Game game;
 	
-	public npc(tt t, int x, int y) {
-		super(t, x, y);
-		this.t = t;
+	public npc(Game game, int x, int y) {
+		super(game, x, y);
+		this.game = game;
 		rect = new Rectangle(-17,-17,100,100);
 	}
 

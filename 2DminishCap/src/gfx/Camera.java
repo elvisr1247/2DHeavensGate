@@ -1,24 +1,24 @@
 package gfx;
 
-import main.tt;
+import main.Game;
 
 public class Camera {
 	
-	private tt t;
+	private Game game;
 	float offsetMaxX,offsetMaxY;
 	float offsetMinX = 0,offsetMinY = 0;
 	public float camX;
 	public float camY;
 	
 
-	public Camera (tt t){
+	public Camera (Game game){
 		super();
-		this.t = t;
+		this.game = game;
 		
 	}
 	public void update(float playerX,float playerY,float mapX, float mapY) {
-		offsetMaxX = mapX - t.getWidth();
-		offsetMaxY = mapY - t.getHeight();
+		offsetMaxX = mapX - game.getWidth();
+		offsetMaxY = mapY - game.getHeight();
 		
 		camX = playerX;
 		camY = playerY;

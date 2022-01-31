@@ -5,8 +5,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 
 import gfx.Assets;
-import gfx.ImageLoader;
-import main.tt;
+import main.Game;
 
 
 
@@ -15,24 +14,24 @@ public class TitleState extends State {
 	
 
 	//TODO:ADD BLINKING TEXT & background img
-	private tt t;
+	private Game game;
 	
 	private Font arial,copyRight;
 	private String title = "Title",
 			title2="Screen",copy ="\u00a9 2021 Tengoku",
 			text = "[press enter]";
-	public TitleState(tt t) {
-		super(t);
-		this.t = t;
+	public TitleState(Game game) {
+		super(game);
+		this.game = game;
 		arial = new Font("Arial",Font.PLAIN,96);
 		copyRight = new Font("Ariel",Font.PLAIN,15);
 	}
 	@Override
 	public void update() {
-		if(!(t == null))
+		if(!(game == null))
 	
-		if(t.getKeyManager().enter) {
-			State.setState(t.getGameState());
+		if(game.getKeyManager().enter) {
+			State.setState(game.getGameState());
 		}
 		
 	}
@@ -41,9 +40,9 @@ public class TitleState extends State {
 	public void draw(Graphics g) {
 //		g.drawImage(ImageLoader.loadImage("/img/bluemoon.png"),
 //				0,0,t.getWidth(),t.getHeight(), null);
-		if(!(t == null))
+		if(!(game == null))
 		g.drawImage(Assets.background,
-				0, 0, t.getWidth(),t.getHeight(), null);
+				0, 0, game.getWidth(),game.getHeight(), null);
 		g.setFont(arial);
 		g.setColor(Color.yellow);
 		g.drawString(title, 230, 140);
