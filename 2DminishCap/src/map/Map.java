@@ -4,7 +4,7 @@ import java.awt.Graphics;
 import java.util.ArrayList;
 
 import UI.UI;
-import entitys.GameObject;
+import entitys.Entity;
 import entitys.Player;
 import main.Game;
 import tiles.TileType;
@@ -38,15 +38,19 @@ public class Map {
 	private Player player;
 	private UI ui;
 	
-	private ArrayList<GameObject> list = new ArrayList<GameObject>();
+	private ArrayList<Entity> list = new ArrayList<Entity>();
 	private Game game;
+	
+	public Map() {
+		
+	}
 	
 	public Map(Game game){
 		this.game = game;
 		
 		Grid();
 		
-		list.add(player = new Player(game,444,670));	
+		list.add(player = new Player(game,444,670,64,64));	
 		ui = new UI(game,player);
 	}
 	
@@ -76,7 +80,7 @@ public class Map {
 	
 	public void update() {
 		ui.update();
-		for(GameObject o : list)o.update();
+		for(Entity e : list)e.update();
 	}
 	
 	public void Draw(Graphics g) {
@@ -91,15 +95,33 @@ public class Map {
 					Tiles t = map[i][j];
 					g.drawImage(t.getTexture(), t.getX(), t.getY(),
 						t.getWidth(), t.getHeight(), null);
+				System.out.println(new Entity().collision(t.getX(),t.getY()));
+//					new Entity().collision(t.getX(),t.getY());
 			}
 		}
 		
-		for(GameObject o : list)o.draw(g);
+		for(Entity e : list)e.draw(g);
 		g.translate(offsetX,offsetY);
 		
 		//keep last
 		ui.draw(g);
 		
+	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public void setWidth(int width) {
+		this.width = width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public void setHeight(int height) {
+		this.height = height;
 	}
 
 

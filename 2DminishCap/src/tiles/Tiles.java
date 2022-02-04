@@ -1,9 +1,11 @@
 package tiles;
 
 import java.awt.Graphics;
+import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import gfx.ImageLoader;
+import map.Map;
 
 public class Tiles {
 		
@@ -23,7 +25,9 @@ public class Tiles {
 
 		public int height;
 		
-		
+		public Tiles() {
+			
+		}
 
 		public Tiles(int x,int y,int width,int height,TileType type) {
 			this.texture = type.img;
@@ -39,6 +43,7 @@ public class Tiles {
 		public void draw(Graphics g) {
 			g.drawImage(texture,x,y,width,height,null);
 		}
+	
 		public boolean isSolid() {
 			return false;
 		}

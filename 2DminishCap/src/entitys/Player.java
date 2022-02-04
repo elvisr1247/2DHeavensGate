@@ -5,21 +5,22 @@ import java.awt.Graphics;
 import java.awt.Rectangle;
 
 import main.Game;
+import map.Map;
 import tiles.Tiles;
 
 
 
-public class Player extends GameObject {
+public class Player extends Entity {
 
     private int health = 2,coins = 0;    
     private boolean attackActive = false;
     private boolean stats = false;
     private int count = 0;
   
-    public Player(Game game, int x, int y) {
-        super(game, x, y);    
-        rect = new Rectangle(18,38,27,25);      
-        arect = new Rectangle(80,25,15,30);
+    public Player(Game game, int x, int y,int width,int height) {
+        super(game, x, y,width,height);    
+        collisionBox = new Rectangle(18,38,27,25);      
+        attackCollisionBox  = new Rectangle(80,25,15,30);
     }
 
     @Override
@@ -28,7 +29,6 @@ public class Player extends GameObject {
     	xMove = 0;
         yMove = 0;   
         
-        if(!(game.getKeyManager()==null))
         	
         if(game.getKeyManager().up){
             direction = "up";
@@ -58,10 +58,7 @@ public class Player extends GameObject {
         
         if(game.getKeyManager().attack)attackActive = true;
         else attackActive = false;
-    	
-//        System.out.println(speed);
-//        collisdes();
-//        collisdes(tiles);
+        
     	 move();   
     }
     
@@ -79,7 +76,7 @@ public class Player extends GameObject {
       	g.drawRect(x,y,width,height);	
       	//draws collision box
       	g.setColor(Color.magenta);
-      	g.drawRect((x +rect.x), (y + rect.y),rect.width, rect.height);
+      	g.drawRect((x +collisionBox.x), (y + collisionBox.y),collisionBox.width, collisionBox.height);
       	
       	attackCollisionBox(g);
 	}
@@ -89,19 +86,19 @@ public class Player extends GameObject {
 		if(attackActive) {
 			switch(direction) {
 				case "up"://top is good
-					g.drawRect((x + arect.x)-55, (y + arect.y)-60,arect.width, arect.height);
+					g.drawRect((x + attackCollisionBox .x)-55, (y + attackCollisionBox .y)-60,attackCollisionBox .width, attackCollisionBox .height);
 					break;
 				case "down":
-					g.drawRect((x + arect.x)-55, (y + arect.y)+50,arect.width, arect.height);
+					g.drawRect((x + attackCollisionBox .x)-55, (y + attackCollisionBox .y)+50,attackCollisionBox .width, attackCollisionBox .height);
 					break;
 				case "left"://left is good
-					g.drawRect((x + arect.x)-110, (y + arect.y),arect.width, arect.height);
+					g.drawRect((x + attackCollisionBox .x)-110, (y + attackCollisionBox .y),attackCollisionBox .width, attackCollisionBox .height);
 					break;
 				case "right"://right is good
-					g.drawRect((x + arect.x), (y + arect.y),arect.width, arect.height);
+					g.drawRect((x + attackCollisionBox .x), (y + attackCollisionBox .y),attackCollisionBox .width, attackCollisionBox .height);
 					break;
 				default:
-					g.drawRect((x + arect.x), (y + arect.y),arect.width, arect.height);
+					g.drawRect((x + attackCollisionBox .x), (y + attackCollisionBox .y),attackCollisionBox .width, attackCollisionBox .height);
 			}
 		}
 	}

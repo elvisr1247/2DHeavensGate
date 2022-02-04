@@ -17,6 +17,7 @@ public class GameState extends State {
 	
 	public GameState(Game game) {
 		super(game);
+		if(game !=null)
 		m = new Map(game);
 		
 	}
