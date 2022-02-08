@@ -9,13 +9,6 @@ import map.Map;
 
 public class Tiles {
 		
-		//STATIC VARIABLES
-//		public static Tiles[] tiles = new Tiles[256];
-		
-		
-		//CLASS
-		public static final int TILESIZE = 64;
-		
 		public BufferedImage texture;
 		public int x;
 
@@ -25,17 +18,24 @@ public class Tiles {
 
 		public int height;
 		
+		public TileType type;
+		
+		public boolean solid = false;
+		
 		public Tiles() {
 			
 		}
 
-		public Tiles(int x,int y,int width,int height,TileType type) {
-			this.texture = type.img;
+		public Tiles(int x,int y,TileType type) {
+			
 			this.x = x;
 			this.y = y;
-			this.width = width;
-			this.height = height;
-
+			this.width = 64;
+			this.height = 64;
+			this.type = type;
+			this.texture = type.img;
+			solid = type.isSolid();
+	
 		}
 		public void update() {
 			
@@ -43,10 +43,13 @@ public class Tiles {
 		public void draw(Graphics g) {
 			g.drawImage(texture,x,y,width,height,null);
 		}
-	
-		public boolean isSolid() {
-			return false;
+		public int getXPlace() {
+			return (int) x / 64;
 		}
+		public int getYPlace() {
+			return (int) y / 64;
+		}
+	
 		public int getX() {
 			return x;
 		}
@@ -71,14 +74,27 @@ public class Tiles {
 		public void setHeight(int height) {
 			this.height = height;
 		}
-		public static int getTilesize() {
-			return TILESIZE;
-		}
 		public BufferedImage getTexture() {
 			return texture;
 		}
 		public void setTexture(BufferedImage texture) {
 			this.texture = texture;
+		}
+
+		public TileType getType() {
+			return type;
+		}
+
+		public void setType(TileType type) {
+			this.type = type;
+		}
+
+		public boolean isSolid() {
+			return solid;
+		}
+
+		public void setSolid(boolean solid) {
+			this.solid = solid;
 		}
 	
 }

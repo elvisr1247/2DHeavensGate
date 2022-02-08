@@ -1,128 +1,111 @@
 package map;
 
 import java.awt.Graphics;
-import java.util.ArrayList;
 
 import UI.UI;
-import entitys.Entity;
 import entitys.Player;
 import main.Game;
 import tiles.TileType;
 import tiles.Tiles;
 
 public class Map {
-	//width and height is reversed
-	int width = 21,height = 16;
 	private int tileSize = 64;
-	public Tiles[][] map = new Tiles[height][width];
-	//bootom is left side, top is right, left is bottom, right is top
-	public  int[][] level = {
-			{2,2,2,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,0},
-			{2,2,2,2,2,2,2,2,0,0,0,0,0,2,2,2,2,2,2,2,0},
-			{2,2,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,2,0},
-			{2,2,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0},
-			{2,2,0,0,0,2,0,0,0,0,0,0,0,0,0,0,0,2,0,2,0},
-			{2,0,0,0,0,0,0,1,3,0,1,0,0,3,0,0,1,1,0,2,0},
-			{2,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{2,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-			{2,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0},
-			{2,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,2,0},
-			{2,2,0,0,0,0,0,0,3,0,0,0,1,3,0,0,0,0,2,2,0},
-			{2,2,0,0,1,0,2,0,0,0,1,0,0,0,1,0,0,0,2,2,0},
-			{2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,2,0,1,2,2,0},
-			{2,2,2,2,2,2,2,2,2,0,0,0,2,2,2,2,2,2,2,2,0},
-			{2,2,2,2,2,2,2,2,0,0,0,0,0,2,2,2,2,2,2,2,0},
-			{0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0}
-			};
+	public Tiles[][] map = new Tiles[13][10];
 	
 	private Player player;
 	private UI ui;
 	
-	private ArrayList<Entity> list = new ArrayList<Entity>();
+
 	private Game game;
 	
-	public Map() {
-		
+	int[][] level = {
+			{2,2,2,2,2,2,2,2,2,2,2,2,2},
+			{2,1,0,1,0,0,0,0,0,0,0,1,2},
+			{2,0,0,2,0,0,0,0,0,0,2,0,2},
+			{2,0,0,0,1,0,1,0,0,0,0,0,2},
+			{2,0,0,1,0,0,0,0,0,0,0,0,2},
+			{2,0,2,0,1,0,3,1,0,2,0,1,2},
+			{2,0,0,0,0,0,0,0,0,0,1,1,2},
+			{2,0,0,0,0,0,0,0,0,0,1,1,2},
+			{2,0,0,0,0,0,0,0,0,0,1,1,2},
+			{2,2,2,2,2,2,2,2,2,2,2,2,2}};
+	
+	public Map() {}
+	
+	public Map(Game game) {
+		 this.game = game;
+		 
+		 grid();		 
+		 player = new Player(game,this,325,220);	
+		 
+		 
+		 ui = new UI(game,player);
 	}
 	
-	public Map(Game game){
-		this.game = game;
-		
-		Grid();
-		
-		list.add(player = new Player(game,444,670,64,64));	
-		ui = new UI(game,player);
-	}
-	
-	public void Grid() {
-		for(int i = 0; i<height;i++) {   
-			for(int j = 0; j < width; j++) {
-				switch(level[i][j]) {
+	public void grid() {
+		for(int i = 0; i<map.length;i++) {   
+			for(int j = 0; j < map[i].length; j++) {				
+				switch(level[j][i]) {
 				case 0:
-					map[i][j] = new Tiles(i*64,j*64,64,64,TileType.Grass00);
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Grass00);
 					break;
 				case 1:
-					map[i][j] = new Tiles(i*64,j*64,64,64,TileType.Grass01);
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Grass01);
 					break;
 				case 2:
-					map[i][j] = new Tiles(i*64,j*64,64,64,TileType.Tree);
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Tree);
 					break;
 				case 3:
-					map[i][j] = new Tiles(i*64,j*64,64,64,TileType.Brick);
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Brick);
 					break;
 				default:
-					map[i][j] = new Tiles(i*64,j*64,64,64,TileType.Grass01);
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Grass00);
 					break;
 				}
 			}
 		}
+		
 	}
+	
+	public void setTile(int xCoord,int yCoord,TileType type) {
+		map[xCoord][yCoord] = new Tiles(xCoord*64,yCoord*64,type);
+	}
+	
+	public Tiles getTile(int xCoord,int yCoord) {
+		return map[xCoord][yCoord];
+	}
+	
+	
 	
 	public void update() {
 		ui.update();
-		for(Entity e : list)e.update();
+		player.update();
 	}
 	
 	public void Draw(Graphics g) {
-		int offsetX = (int)player.getX() - game.getWidth()/2;
-		int offsetY = (int)player.getY() - game.getWidth()/3;
+		//centers on player
+		int offsetX = (int)player.getX() - game.getWidth()/2 + 36;
+		int offsetY = (int)player.getY() - game.getHeight()/2 + 54;
 		
 		g.translate(-offsetX,-offsetY);
 		
-		for(int i = 0; i < height;i++) {
-			for(int j = 0; j<width;j++) {
+		for(int i = 0; i < map.length;i++) {
+			for(int j = 0; j<map[i].length;j++) {
 
 					Tiles t = map[i][j];
 					g.drawImage(t.getTexture(), t.getX(), t.getY(),
 						t.getWidth(), t.getHeight(), null);
-				System.out.println(new Entity().collision(t.getX(),t.getY()));
-//					new Entity().collision(t.getX(),t.getY());
+
 			}
 		}
 		
-		for(Entity e : list)e.draw(g);
+		player.draw(g);
+		
 		g.translate(offsetX,offsetY);
 		
 		//keep last
 		ui.draw(g);
 		
 	}
-
-	public int getWidth() {
-		return width;
-	}
-
-	public void setWidth(int width) {
-		this.width = width;
-	}
-
-	public int getHeight() {
-		return height;
-	}
-
-	public void setHeight(int height) {
-		this.height = height;
-	}
-
 
 }

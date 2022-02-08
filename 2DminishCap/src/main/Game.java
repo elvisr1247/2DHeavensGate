@@ -1,8 +1,11 @@
 package main;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Graphics;
 import java.awt.Image;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,8 +50,18 @@ public class Game extends JPanel implements Runnable {
         frame.setTitle(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width,height);
-        frame.setResizable(false);
+//        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        //prints window size
+        frame.addComponentListener(new ComponentAdapter() 
+        {  
+            public void componentResized(ComponentEvent evt) {
+                Component c = (Component)evt.getSource();
+                UI.windowSize(c);
+                //update your view/canvas
+            }
+            
+        });
         frame.setVisible(true);
         Assets.init();
  
@@ -118,6 +131,7 @@ public class Game extends JPanel implements Runnable {
         if(State.getState() != null) 
 			State.getState().draw(g);
         
+        repaint();
         g.dispose();
     }
 

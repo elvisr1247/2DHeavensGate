@@ -27,9 +27,9 @@ public class KeyManager implements KeyListener {
         }else if(e.getKeyCode() == KeyEvent.VK_A
                 || e.getKeyCode() == KeyEvent.VK_LEFT){
             left = true;
-        }else if(e.getKeyCode() == KeyEvent.VK_E) {
+        }else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
              attack = true;
-        }else if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
+        }else if(e.getKeyCode() == KeyEvent.VK_Q) {
         	run = true;
         }else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
         	enter = true;
@@ -49,9 +49,9 @@ public class KeyManager implements KeyListener {
         }else if(e.getKeyCode() == KeyEvent.VK_A
                 || e.getKeyCode() == KeyEvent.VK_LEFT){
             left = false;
-        }else if(e.getKeyCode() == KeyEvent.VK_E) {
+        }else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             attack = false;
-       }else if(e.getKeyCode() == KeyEvent.VK_SHIFT) {
+       }else if(e.getKeyCode() == KeyEvent.VK_Q) {
        		run = true;
        }else if(e.getKeyCode() == KeyEvent.VK_ENTER) {
        		enter = true;

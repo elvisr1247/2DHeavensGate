@@ -15,14 +15,14 @@ import tiles.Tiles;
 public abstract class GameObject {
 	
 
-  public int x,y;
+  public float x,y;
   protected int width,height;
 
   protected Game game;
 
   public GameObject() {}
   
-  public GameObject(Game game, int x , int y,int width,int height){
+  public GameObject(Game game, float x , float y,int width,int height){
       this.x = x;
       this.y = y;
       this.width = width;

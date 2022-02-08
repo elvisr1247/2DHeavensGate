@@ -23,8 +23,8 @@ public class TitleState extends State {
 	public TitleState(Game game) {
 		super(game);
 		this.game = game;
-		arial = new Font("Arial",Font.PLAIN,96);
-		copyRight = new Font("Ariel",Font.PLAIN,15);
+		arial = Assets.Ariel64;
+		copyRight = Assets.Ariel32;
 	}
 	@Override
 	public void update() {
@@ -45,8 +45,8 @@ public class TitleState extends State {
 				0, 0, game.getWidth(),game.getHeight(), null);
 		g.setFont(arial);
 		g.setColor(Color.yellow);
-		g.drawString(title, 230, 140);
-		g.drawString(title2, 170, 220);
+		g.drawString(title, 250, 140);
+		g.drawString(title2, 200, 220);
 		
 		
 		g.setFont(copyRight);

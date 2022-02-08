@@ -2,10 +2,13 @@ package UI;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import entitys.Player;
+import gfx.Assets;
 import main.Game;
 
 public class UI {
@@ -18,7 +21,9 @@ public class UI {
 	private Game game;
 	private int timer = 0;
 	private static int FPS;
+	private static Component windowsize;
 	
+	private int row,col;
 	
 	public UI() {
 		
@@ -37,12 +42,18 @@ public class UI {
 	
 	public void draw(Graphics g) {
 		Color c = new Color(255,255,255);
+		
+		row = (int)p.getX()/64;
+		col = (int)p.getY()/64;
+		
 		g.setColor(c);
 		playerHealth(g);
+		coinCollected(g);
 		if(p.isStats()) {
-			g.drawString(p.getX()+","+p.getY(),20,50);
-			g.drawString("Timer: "+timer, 20, 70);
-			g.drawString("Fps: "+FPS, 20, 90);
+			g.drawString(row+","+col,10,70);
+			g.drawString("Timer: "+timer, 10, 110);
+			g.drawString("Fps: "+FPS, 10, 150);
+//			g.drawString("Window Size: "+windowsize, 20, 110);
 		}
 		
 	
@@ -72,7 +83,14 @@ public class UI {
 		
 	}
 	
-	public void coinCollected() {}
+	public void coinCollected(Graphics g) {
+
+//		g.setFont(new Font("TimesNewRoman",Font.PLAIN,24);); 
+		g.setFont(Assets.TimesNewRoman24); 
+		String rupee = String.format("%03d", p.getRupees());
+		g.drawImage(Assets.rupee,500,395,42,42,null);
+		g.drawString(rupee, 550, 425);
+	}
 	
 	public void drawDialogueScreen(Graphics g) {
 		int  x = 20,y = 300,width = 600,height = 100,
@@ -94,6 +112,9 @@ public class UI {
 
 	public static void fps(int fps) {
 		FPS = fps;
+	}
+	public static void windowSize(Component c) {
+		windowsize = c;	
 	}
 	
 	
