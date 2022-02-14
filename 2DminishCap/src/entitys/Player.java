@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
+import gfx.Assets;
 import main.Game;
 import map.Map;
 
@@ -14,11 +15,12 @@ public class Player extends Entity {
     private int health = 2,rupees = 000;    
     private boolean attackActive = false;
     private boolean stats = false;
+    public int DEFAULTSPEED = 5;
+	public int speed = DEFAULTSPEED;
     private int count = 0;
-    
-
-    public Player(Game game,Map map,float x, float y) {
-    	super(game,map, x, y,size,size);    
+   
+    public Player(Game game,Map m,float x, float y) {
+    	super(game,m,x, y,64,64);    
     	bounds = new Rectangle(18,38,27,25);  
         attackCollisionBox  = new Rectangle(80,25,15,30);
 	}
@@ -48,25 +50,23 @@ public class Player extends Entity {
         	count++;
         	onorOff();
         }
-        if(game.getKeyManager().attack) {attackActive = true;}
-        else {attackActive = false;}
-        
+    
+		if(game.getKeyManager().attack)attackActive = true;
+		else attackActive = false;
+
+//		System.out.println(collisiondia());
     	 move();  
     	 
     } 
     
     
-    private void onorOff() {
-		if(count == 1) {
-			 stats = true;
-		}
-		
-	}
+    private void onorOff() {if(count == 1)stats = true;}
 
 	@Override
 	public void draw(Graphics g) {
     	g.setColor(Color.white);
-      	g.drawRect((int)x,(int)y,width,height);	
+      	g.drawImage(Assets.player[0],(int)x,(int)y,width,height,null);
+      	
       	//draws collision box
       	g.setColor(Color.magenta);
       	g.drawRect((int)(x +bounds.x), (int)(y + bounds.y),bounds.width, bounds.height);
@@ -92,8 +92,15 @@ public class Player extends Entity {
 					break;
 				default:
 					g.drawRect((int)(x + attackCollisionBox .x),(int) (y + attackCollisionBox .y),attackCollisionBox .width, attackCollisionBox .height);
-			}
+			}	
 		}
+	}
+	
+	public boolean collisiondia() {
+		if(bounds.intersects(new NPC().getBounds())) {
+			return true;
+		}
+		return false;
 	}
 
 	public int getHealth() {

@@ -12,7 +12,9 @@ import javax.swing.JPanel;
 
 import UI.UI;
 import gfx.Assets;
+import gfx.Camera;
 import input.KeyManager;
+import map.Map;
 import state.GameState;
 import state.State;
 import state.TitleState;
@@ -36,6 +38,9 @@ public class Game extends JPanel implements Runnable {
     
     public State gameState;  
     private State titleState;
+    
+    private Camera cam;
+    private Map map;
     
     public Game(){
         frame = new JFrame();
@@ -64,7 +69,8 @@ public class Game extends JPanel implements Runnable {
         });
         frame.setVisible(true);
         Assets.init();
- 
+       
+        cam = new Camera(this,0,0);
         gameState = new GameState(this);
         titleState = new TitleState(this);
 //        State.setState(titleState);
@@ -128,9 +134,9 @@ public class Game extends JPanel implements Runnable {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
+       
         if(State.getState() != null) 
 			State.getState().draw(g);
-        
         repaint();
         g.dispose();
     }
@@ -171,4 +177,28 @@ public class Game extends JPanel implements Runnable {
         Game game = new Game();
         game.start();
     }
+
+
+
+	public Camera getCam() {
+		return cam;
+	}
+
+
+
+	public void setCam(Camera cam) {
+		this.cam = cam;
+	}
+
+
+
+	public Map getMap() {
+		return map;
+	}
+
+
+
+	public void setMap(Map map) {
+		this.map = map;
+	}
 }

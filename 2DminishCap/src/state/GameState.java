@@ -10,6 +10,10 @@ import tiles.TileType;
 
 public class GameState extends State {
 
+	//TODO: update tiles
+	/*
+	 https://opengameart.org/content/dungeon-tileset-1
+	 */
 	private Map m;
 	
 	public GameState(Game game) {
