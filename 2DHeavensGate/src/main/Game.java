@@ -43,11 +43,12 @@ public class Game extends JPanel implements Runnable {
     public State titleState;
     //Camera
     private Camera cam;
+ 
    
     
     public Game(){
         frame = new JFrame();
-        keyManager = new KeyManager();
+        keyManager = new KeyManager(this);
         mouseManager = new MouseManager();
         
         
@@ -124,10 +125,8 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update(){
-
     	if(State.getState() != null) 
 			State.getState().update();
-	
     }
 
 
@@ -181,9 +180,18 @@ public class Game extends JPanel implements Runnable {
 	public MouseManager getMouseManager() {
 		return mouseManager;
 	}
+
+	public State getTitleState() {
+		return titleState;
+	}
+
+	public void setTitleState(State titleState) {
+		this.titleState = titleState;
+	}
 	
 	public static void main(String[]argh){
         Game game = new Game();
         game.start();
     }
+
 }

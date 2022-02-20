@@ -1,17 +1,14 @@
 package map;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
 import UI.UI;
 import entitys.Entity;
-import entitys.NPC;
 import entitys.Player;
 import entitys.Skeleton;
 import entitys.Tree;
 import main.Game;
-import tiles.TileEditor;
 import tiles.TileType;
 import tiles.Tiles;
 
@@ -44,7 +41,7 @@ public class Map {
 			{0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0}};
 	
 	//used to draw and update all entities
-	ArrayList<Entity> e = new ArrayList<Entity>();
+	ArrayList<Entity> entites = new ArrayList<Entity>();
 	//TODO:fix and update tile editor
 	//private TileEditor tileEditor;
 	
@@ -55,11 +52,11 @@ public class Map {
 		 
 		 grid();		 
 		 
-		 e.add(skeleton = new Skeleton(game,this,250,220));
-		 e.add(new Tree(game,this,400,140,64*2,64*3));
+		 entites.add(skeleton = new Skeleton(game,this,250,220));
+		 entites.add(new Tree(game,140,400,this,64*2,64*3));
 //		 e.add(new NPC(game,this,100,100));
-		 
-		 e.add(player = new Player(game,this,325,220));
+//		 e.remove(height)
+		 entites.add(player = new Player(game,this,325,220));
 		 ui = new UI(game,player);
 		 
 //		 tileEditor = new TileEditor(game,this,player);
@@ -67,7 +64,14 @@ public class Map {
 	
 	public void update() {
 		ui.update();
-		for(Entity e : e)e.update();
+		//if entity is dead remove
+		for(int i = 0; i < entites.size();i++) {
+			Entity e = entites.get(i);
+			e.update();
+			if(!e.isActiveEntity() && !e.isUnkillableEntity()) {
+				entites.remove(e);
+			}
+		}
 		game.getCam().update(player);
 //		tileEditor.update();
 	}
@@ -89,7 +93,7 @@ public class Map {
 		}
 		
 		//draws all the entity's
-		for(Entity e : e)e.draw(g);
+		for(Entity e : entites)e.draw(g);
 //		tileEditor.draw(g);
 		g.translate((int)game.getCam().getxOffset(),(int)game.getCam().getyOffset());
 		//keep last
@@ -135,11 +139,11 @@ public class Map {
 	}
 
 	public ArrayList<Entity> getE() {
-		return e;
+		return entites;
 	}
 
 	public void setE(ArrayList<Entity> e) {
-		this.e = e;
+		this.entites = e;
 	}
 
 	public int getWidth() {
@@ -156,6 +160,14 @@ public class Map {
 
 	public void setHeight(int height) {
 		this.height = height;
+	}
+
+	public ArrayList<Entity> getEntites() {
+		return entites;
+	}
+
+	public void setEntites(ArrayList<Entity> entites) {
+		this.entites = entites;
 	}
 	
 	

@@ -11,13 +11,11 @@ public class NPC extends Entity {
 	
 	public Rectangle dialogueBoxDetected = new Rectangle(-30,-30,128,128);
 
-	public NPC() {}
+//	public NPC() {}
 	
 	public NPC(Game game, Map m, float x, float y) {
 		super(game, m, x, y, 64,64);
 		bounds = new Rectangle(18,33,30,30);
-		
-		
 		
 	}
 	

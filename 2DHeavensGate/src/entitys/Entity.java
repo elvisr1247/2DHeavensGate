@@ -10,17 +10,17 @@ import tiles.Tiles;
 
 public class Entity extends GameObject {
 
-	  public String direction = "";
-	  protected int xMove,yMove;
-	  protected Rectangle bounds;
-	  protected Rectangle attackCollisionBox;
+	  protected String direction = "";
+	  protected boolean activeEntity = true;
+	  protected boolean unkillableEntity = false;
+//	  protected int attackDamage;
+	  protected int xMove,yMove;  
+	  protected int health;
 	  protected Tiles tiles;
 	  protected Map m;
-	   
-	  public Entity() {}
 	  
 	  public Entity(Game game,Map m,float x, float y,int width,int height) {
-			super(game,x, y,width,height);
+			super(game,x, y,m,width,height);
 			this.m = m;
 		}
 	
@@ -39,7 +39,7 @@ public class Entity extends GameObject {
 			  if(!collisionWithTile(tx,(int)(y + bounds.y)/64)&&
 					  !collisionWithTile(tx,(int)(y + bounds.y + bounds.height)/64))
 	              x += xMove;
-			  else x = tx * 64 - bounds.x - bounds.width - 1;
+			  else x = tx * 64 - bounds.x - bounds.width - 2;
 		  }else  if(xMove < 0){//left movement
 			  tx = (int)(x+ xMove + bounds.x)/64;
 			  if(!collisionWithTile(tx,(int)(y+bounds.y)/64)&&
@@ -57,15 +57,13 @@ public class Entity extends GameObject {
 	  		 if(!collisionWithTile((int)(x+bounds.x)/64,ty)&&
 	  				 !collisionWithTile((int)(x+bounds.x+bounds.width)/64,ty))
 	  			 y+=yMove;
-	  		 else y = ty * 64 - bounds.y - bounds.height - 1;
-
-	  		
+	  		 else y = ty * 64 - bounds.y - bounds.height - 2;
 		  }else  if(yMove < 0){//down movement  
 			  ty = (int)(y + yMove + bounds.y)/64;
 		  		 if(!collisionWithTile((int)(x+bounds.x)/64,ty)&&
 		  				 !collisionWithTile((int)(x+bounds.x+bounds.width)/64,ty)) {
 		  			 y+=yMove;
-		  		 }else {y = ty * 64 + 64 - bounds.y;}
+		  		 }else y = ty * 64 + 64 - bounds.y;
 		  }
 	
 	  }
@@ -89,6 +87,18 @@ public class Entity extends GameObject {
 			}
 		}
 		return false;
+	}	
+	public void hurt(int amt) {
+		health -= amt;
+		if(health <= 0) {
+			activeEntity = false;
+			die();
+		}
+	}
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	public Rectangle getBounds(float xOffset,float yOffset) {
@@ -145,5 +155,23 @@ public class Entity extends GameObject {
 	public void setyMove(int yMove) {
 		this.yMove = yMove;
 	}
+
+	public boolean isActiveEntity() {
+		return activeEntity;
+	}
+
+	public void setActiveEntity(boolean activeEntity) {
+		this.activeEntity = activeEntity;
+	}
+
+	public boolean isUnkillableEntity() {
+		return unkillableEntity;
+	}
+
+	public void setUnkillableEntity(boolean unkillableEntity) {
+		this.unkillableEntity = unkillableEntity;
+	}
+
+
 
 }

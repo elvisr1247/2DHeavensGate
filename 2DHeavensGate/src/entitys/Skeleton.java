@@ -15,15 +15,20 @@ public class Skeleton extends Entity {
 		super(game,m,x, y, 64, 64);
 		//temp collision bounds
 		bounds = new Rectangle(22,38,19,25);  
+		health = 2;
 	}
 
 	public void update() {
 		xMove = 0;
 		yMove = 0;
-		
-//		yMove++;                
-		
+		          
 		move();
+	}
+	
+	@Override
+	public void die() {
+		
+		
 	}
 	
     public void draw(Graphics g) {

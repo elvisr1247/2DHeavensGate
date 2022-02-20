@@ -17,12 +17,12 @@ public abstract class GameObject {
 
   public float x,y;
   protected int width,height;
-
+  protected Rectangle bounds;
   protected Game game;
 
-  public GameObject() {}
+//  public GameObject() {}
   
-  public GameObject(Game game, float x , float y,int width,int height){
+  public GameObject(Game game, float x , float y,Map m, int width,int height){
       this.x = x;
       this.y = y;
       this.width = width;
@@ -33,6 +33,8 @@ public abstract class GameObject {
   public abstract void update();
   
   public abstract void draw(Graphics g);
+  
+  public abstract void die();
   
   
 }

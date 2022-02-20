@@ -10,12 +10,14 @@ import map.Map;
 
 public class Tree extends Entity {
 
+	public Tree(Game game, float x, float y, Map m, int width, int height) {
+		super(game, m, y, x, width, height);
+		bounds = new Rectangle(50,150,30,40);
+//		unkillableEntity = true;
+	}
+
 	private int health = 3;
 	
-	public Tree(Game game,Map m,float x, float y,int width,int height) {
-		super(game,m,x, y,width,height);
-		bounds = new Rectangle(50,150,30,40);
-	}
 	
 	public void update() {
 
@@ -34,6 +36,16 @@ public class Tree extends Entity {
 
 	public void setHealth(int health) {
 		this.health = health;
+	}
+
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public boolean isUnkillableEntity() {
+		return true;
 	}
 
 }

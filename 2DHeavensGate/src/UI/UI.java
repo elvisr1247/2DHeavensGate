@@ -21,6 +21,7 @@ public class UI {
 	private Game game;
 	private int timer = 0;
 	private static int FPS;
+	public static int commandNum = 0;
 	
 	
 	
@@ -117,6 +118,12 @@ public class UI {
 
 	public static void fps(int fps) {
 		FPS = fps;
+	}
+	public int getCommandNum() {
+		return commandNum;
+	}
+	public void setCommandNum(int commandNum) {
+		this.commandNum = commandNum;
 	}
 	
 	

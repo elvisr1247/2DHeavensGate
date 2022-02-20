@@ -57,4 +57,6 @@ public class Assets {
 		rupee = ImageLoader.loadImage("/img/rupee.png");
 		tree = buttonSheet.crop(0, 0, 32, 32*2);
 	}
+	
+	
 }
