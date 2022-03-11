@@ -1,18 +1,16 @@
 package main;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import Audio.Audio;
 import UI.UI;
 import gfx.Assets;
 import gfx.Camera;
+import gfx.FontLoader;
 import input.KeyManager;
 import input.MouseManager;
 import map.Map;
@@ -41,15 +39,23 @@ public class Game extends JPanel implements Runnable {
     //States
     public State gameState;  
     public State titleState;
+  
     //Camera
     private Camera cam;
- 
+    
+    //Audio
+    private Audio audio;
+    
+    //World map
+    private Map map;
    
     
     public Game(){
         frame = new JFrame();
         keyManager = new KeyManager(this);
         mouseManager = new MouseManager();
+        audio = new Audio();
+        
         
         
         frame.add(this);
@@ -125,6 +131,7 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update(){
+//    	keyManager.update();
     	if(State.getState() != null) 
 			State.getState().update();
     }
@@ -135,6 +142,20 @@ public class Game extends JPanel implements Runnable {
         if(State.getState() != null) 
 			State.getState().draw(g);
         g.dispose();
+    }
+    
+    public void playMusic(String path) {
+    	audio.setFile(path);
+		audio.play();
+    	audio.loop();
+    }
+ 
+    public void stopMusic() {
+    	audio.stop();
+    }
+    public void playSoundEffect(String path) {
+    	audio.setFile(path);
+    	audio.play();
     }
 
     public int getWidth() {
@@ -189,9 +210,27 @@ public class Game extends JPanel implements Runnable {
 		this.titleState = titleState;
 	}
 	
+	public Map getMap() {
+		return map;
+	}
+
+	public void setMap(Map map) {
+		this.map = map;
+	}
+	
+	public Audio getAudio() {
+		return audio;
+	}
+
+	public void setAudio(Audio audio) {
+		this.audio = audio;
+	}
+
+
+
 	public static void main(String[]argh){
         Game game = new Game();
         game.start();
-    }
+	}
 
 }

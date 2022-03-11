@@ -3,12 +3,18 @@ package map;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
+import Audio.Audio;
+import Item.ItemManager;
 import UI.UI;
 import entitys.Entity;
+import entitys.Entity;
+import entitys.Grass;
 import entitys.Player;
 import entitys.Skeleton;
 import entitys.Tree;
+import entitys.npc;
 import main.Game;
+import tiles.TileEditor;
 import tiles.TileType;
 import tiles.Tiles;
 
@@ -41,22 +47,29 @@ public class Map {
 			{0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0}};
 	
 	//used to draw and update all entities
-	ArrayList<Entity> entites = new ArrayList<Entity>();
+	private ArrayList<Entity> entites = new ArrayList<Entity>();
+	private ItemManager itemManager;
 	//TODO:fix and update tile editor
-	//private TileEditor tileEditor;
+	private TileEditor tileEditor;
 	
-	public Map() {}
+	private Grass grass;
 	
 	public Map(Game game) {
 		 this.game = game;
 		 
-		 grid();		 
+		 grid();		
+		
 		 
-		 entites.add(skeleton = new Skeleton(game,this,250,220));
-		 entites.add(new Tree(game,140,400,this,64*2,64*3));
-//		 e.add(new NPC(game,this,100,100));
-//		 e.remove(height)
-		 entites.add(player = new Player(game,this,325,220));
+		 itemManager = new ItemManager(game);
+		 entites.add(skeleton = new Skeleton(game,250,220));
+		 entites.add(new npc(game,120,30));
+		 entites.add(new Tree(game,400,140,64*2,64*3));
+		 //temporary grass code
+		 for(int i = 250;i<442;i+=64) {
+			 for(int j = 612; j<740;j+=64) 
+				 entites.add(new Grass(game,i,j));
+		 }
+		 entites.add(player = new Player(game,325,220));
 		 ui = new UI(game,player);
 		 
 //		 tileEditor = new TileEditor(game,this,player);
@@ -64,6 +77,7 @@ public class Map {
 	
 	public void update() {
 		ui.update();
+		itemManager.update();
 		//if entity is dead remove
 		for(int i = 0; i < entites.size();i++) {
 			Entity e = entites.get(i);
@@ -77,21 +91,26 @@ public class Map {
 	}
 	
 	public void Draw(Graphics g) {
+		//used to render portions of the screen begins used
+		int xStart = (int)Math.max(0, game.getCam().getxOffset()/64);
+		int xEnd = (int)Math.min(width, (game.getCam().getxOffset()+game.getWidth())/64 + 1);
+		int yStart = (int)Math.max(0, game.getCam().getyOffset()/64);
+		int yEnd = (int)Math.min(height, (game.getCam().getyOffset()+game.getHeight())/64+1);
+		
 		//g.translate used for camera movement
 		g.translate((int)-game.getCam().getxOffset(),(int)-game.getCam().getyOffset());
-		for(int i = 0; i < map.length;i++) {
-			for(int j = 0; j<map[i].length;j++) {
+		for(int i = xStart; i < xEnd;i++) {
+			for(int j = yStart; j<yEnd;j++) {
 
 					Tiles t = map[i][j];
 					g.drawImage(t.getTexture(), t.getX(), t.getY(),
 						t.getWidth(), t.getHeight(), null);
-					
 //					g.setColor(Color.DARK_GRAY);
 //					g.drawRect(i*64, j*64, 64, 64);
 
 			}
 		}
-		
+		itemManager.draw(g);
 		//draws all the entity's
 		for(Entity e : entites)e.draw(g);
 //		tileEditor.draw(g);
@@ -142,8 +161,8 @@ public class Map {
 		return entites;
 	}
 
-	public void setE(ArrayList<Entity> e) {
-		this.entites = e;
+	public void setE(ArrayList<Entity> c) {
+		this.entites = c;
 	}
 
 	public int getWidth() {
@@ -168,6 +187,30 @@ public class Map {
 
 	public void setEntites(ArrayList<Entity> entites) {
 		this.entites = entites;
+	}
+
+	public Game getGame() {
+		return game;
+	}
+
+	public void setGame(Game game) {
+		this.game = game;
+	}
+
+	public ItemManager getItemManager() {
+		return itemManager;
+	}
+
+	public void setItemManager(ItemManager itemManager) {
+		this.itemManager = itemManager;
+	}
+
+	public Player getPlayer() {
+		return player;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
 	}
 	
 	

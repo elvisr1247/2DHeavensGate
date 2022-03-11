@@ -1,7 +1,11 @@
 package state;
 
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.InputStream;
 
 import UI.UI;
 import gfx.Assets;
@@ -21,13 +25,14 @@ public class TitleState extends State {
 			startButton = "Start",settingsButton = "Settings",
 			quitButton = "Quit";
 	
-	
+	Font font1;
 	
 	public TitleState(Game game) {
 		super(game);
 		this.game = game;
 		
-	
+		
+		
 	}
 	@Override
 	public void update() {
@@ -44,6 +49,7 @@ public class TitleState extends State {
 				0, 0, game.getWidth(),game.getHeight(), null);
 		
 		g.setFont(Assets.font64);
+	
 		Color c = new Color(255,255,240);//white(ivory)
 		g.setColor(c);
 		g.drawString(title, 250, 140);

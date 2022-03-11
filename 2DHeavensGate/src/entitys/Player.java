@@ -3,15 +3,15 @@ package entitys;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 
+import Item.Item;
 import gfx.Assets;
 import main.Game;
-import map.Map;
-import state.State;
 
 
 
-public class Player extends Entity {
+public class Player extends Creature {
 
     private int rupees = 000;    
     private boolean attackActive = false;
@@ -20,11 +20,16 @@ public class Player extends Entity {
     private int MAX_SPEED = 7;
 	private int speed = DEFAULTSPEED;
     private int count = 0;
+    private int keys = 0;
     //attack cool down timer
-    private long lastAttackTimer,attackCooldown = 800,attackTimer = attackCooldown;
-   
-    public Player(Game game,Map m,float x, float y) {
-    	super(game,m,x, y,64,64);    
+    private long lastAttackTimer,
+    	attackCooldown = 500,attackTimer = attackCooldown;
+  
+    private ArrayList<Item> inventory = new ArrayList<>();
+    private final int inventorySize = 20;
+    
+    public Player(Game game,float x, float y) {
+    	super(game,x, y,64,64);    
     	bounds = new Rectangle(18,38,27,25);  
      
         
@@ -34,9 +39,9 @@ public class Player extends Entity {
 	@Override
     public void update() {
 
-    	xMove = 0;
-        yMove = 0;   
-
+       xMove = 0;
+       yMove = 0;   
+       
        getInput();
        move();  
     	 
@@ -44,14 +49,18 @@ public class Player extends Entity {
 	
 	@Override
 	public void draw(Graphics g) {
-    	g.setColor(Color.white);
-      	g.drawImage(Assets.player[0],(int)x,(int)y,width,height,null);
+//    	g.setColor(Color.white);
+//      	g.drawImage(Assets.player[0],(int)x,(int)y,width,height,null);
+      	
       	
       	//draws collision box
       	g.setColor(Color.magenta);
       	g.drawRect((int)(x +bounds.x), (int)(y + bounds.y),bounds.width, bounds.height);
       	
-      	attackCollisionBox(g);
+      	g.setColor(Color.yellow);
+  
+      	hitBox(g);
+//      	attackCollisionBox(g);
 	}
 
 	private void getInput() {
@@ -69,70 +78,58 @@ public class Player extends Entity {
 	           xMove -= speed;
 	      }
 	   	 
-	   	 if(game.getKeyManager().run)
-	   		speed = MAX_SPEED;
-	   	else
-	   		speed = DEFAULTSPEED;
-	   	if(State.getState() == game.getGameState()) {
-	   		if(game.getKeyManager().enter) { 
-	   			count++;
-	   			onorOff();
-	   			}
-	   		}
-	   	if(game.getKeyManager().attack)attackActive = true;
-	   	else attackActive = false;
+	   	 if(game.getKeyManager().run)speed = MAX_SPEED;
+	   	 else speed = DEFAULTSPEED;
+
+	   	if(game.getKeyManager().attack)setAttackActive(true);
+	   	else setAttackActive(false);
 	}
 	
-	private void attackCollisionBox(Graphics g) {
+	private void hitBox(Graphics g) {
 		attackTimer += System.currentTimeMillis() - lastAttackTimer;
 		lastAttackTimer = System.currentTimeMillis();
 		if(attackTimer < attackCooldown)
 			return;
 		
-		int rsize = 30;
-		Rectangle cb = getBounds(0,0);
-		Rectangle ar = new Rectangle(10,10,rsize,rsize);
-		if(attackActive) {
-			if(direction.equals("up")) {
-				ar.x = cb.x + cb.width/2 - rsize/2;
-				ar.y = cb.y - rsize;
-			}else if(direction.equals("down")) {
-				ar.x = cb.x + cb.width / 2 - rsize /2;
-				ar.y = cb.y + cb.height;
-			}else if(direction.equals("left")) {
-				ar.x = cb.x  - rsize;
-				ar.y = cb.y + cb.height / 2 - rsize / 2;
-			}else if(direction.equals("right")) {
-				ar.x = cb.x + cb.width;
-				ar.y = cb.y + cb.height /2 - rsize / 2;
+		if(isAttackActive()) {
+			switch(direction) {
+				case "up":
+					attackBounds = new Rectangle((int)x+22,(int)y,16,32);
+					break;
+				case "down":
+					attackBounds = new Rectangle((int)x+23,(int)y+70,16,32);
+					break;
+				case "left":
+					attackBounds = new Rectangle((int)x-5,(int)y+30,16,32);
+					break;
+				case "right":
+					attackBounds = new Rectangle((int)x+50,(int)y+30,16,32);
+					break;
+				default:
+					attackBounds = new Rectangle((int)x+50,(int)y+30,16,32);
+					break;
+				
 			}
-		
 			attackTimer = 0;
+			g.drawRect((int)attackBounds.x,(int)attackBounds.y,attackBounds.width,attackBounds.height);
 			
-			g.drawRect((int)(ar.x),
-					(int)(ar.y),ar.width, ar.height);
-			
-		for(Entity e : m.getEntites()) {
-			//if entity doesnt equal its self do this
-			if(e.equals(this))continue;
-			if(e.getBounds(0, 0).intersects(ar)) {
-				e.hurt(1);
-				return;
+			for(Entity entites : game.getMap().getEntites()) {
+				//if entity doesnt equal its self do this
+				if(entites.equals(this))continue;
+				if(entites.getBounds(0, 0).intersects(attackBounds)) {
+					//how much enemys are hurt by
+					entites.hurt(attackDamage);
+					return;
+				}
 			}
 		}
-	 }
-	
 	}
-
-	//check if odd or even 
-   private void onorOff() {if(count % 2 == 0)stats = true;else stats = false;}
 	
+		
 	@Override
 	public void die() {
-		// TODO Auto-generated method stub
-		
+		System.out.println("death");
 	}
-
 
 	public boolean isStats() {
 		return stats;
@@ -148,6 +145,26 @@ public class Player extends Entity {
 
 	public int getHealth() {
 		return health;
+	}
+
+	public void setRupees(int rupees) {
+		this.rupees = rupees;
+	}
+
+	public boolean isAttackActive() {
+		return attackActive;
+	}
+
+	public void setAttackActive(boolean attackActive) {
+		this.attackActive = attackActive;
+	}
+
+	public int getKeys() {
+		return keys;
+	}
+
+	public void setKeys(int keys) {
+		this.keys = keys;
 	}
 
 }

@@ -1,6 +1,6 @@
 package gfx;
 
-import entitys.Entity;
+import entitys.Creature;
 import main.Game;
 import map.Map;
 
@@ -16,8 +16,8 @@ public class Camera {
 	}
 	public void cameraLimits() {
 		
-		float worldX = new Map().getWidth()*64 - game.getWidth()+14;
-		float worldY = new Map().getHeight()*64 - game.getHeight()+34;
+		float worldX = game.getMap().getWidth()*64 - game.getWidth()+14;
+		float worldY = game.getMap().getHeight()*64 - game.getHeight()+34;
 		
 		if(xOffset < 0) {//left
 			xOffset = 0;
@@ -33,7 +33,7 @@ public class Camera {
 		
 	}
 	
-	public void update(Entity player){
+	public void update(Creature player){
 		xOffset = (int)player.getX() - game.getWidth()/2 + 36;
 		yOffset = (int)player.getY() - game.getHeight()/2 + 54;
 		cameraLimits();
