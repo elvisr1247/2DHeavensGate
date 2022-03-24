@@ -9,12 +9,13 @@ import main.Game;
 
 public class npc extends Creature {
 
-	private Rectangle diabox = new Rectangle(107,15,90,90); 
+	
 	private boolean finishedText = false;
 	private String[] text;
+	Rectangle diabox;
 	
 	public npc(Game game, float x, float y) {
-		super(game, x, y,64,64);
+		super(game, x, y,game.tileSize,game.tileSize);
 		bounds = new Rectangle(0,0,width,height);  
 		health = 2;
 		
@@ -28,6 +29,8 @@ public class npc extends Creature {
 	public void update() {
 		xMove = 0;
 		yMove = 0;
+		
+		diabox = new Rectangle((int)x-15,(int)y-15,90,90);
 		
 		move();
 		
@@ -50,7 +53,7 @@ public class npc extends Creature {
 	}
 	
 	public boolean playerDetected() {
-		if(game.getMap().getPlayer().getBounds(0, 0).intersects(diabox)) {
+		if(game.getMap().getEntityManager().getPlayer().getBounds(0, 0).intersects(diabox)) {
 			return true;
 		}
 		return false;

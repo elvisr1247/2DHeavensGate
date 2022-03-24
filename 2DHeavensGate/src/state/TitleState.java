@@ -36,14 +36,11 @@ public class TitleState extends State {
 	}
 	@Override
 	public void update() {
-		
+	
 	}
 
 	@Override
 	public void draw(Graphics g) {
-	
-//		g.drawImage(Assets.GateBackground,
-//				0, 0, game.getWidth(),game.getHeight(), null);
 		
 		g.drawImage(Assets.Moonbackground,
 				0, 0, game.getWidth(),game.getHeight(), null);

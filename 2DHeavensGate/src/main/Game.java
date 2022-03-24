@@ -6,9 +6,9 @@ import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-import Audio.Audio;
 import UI.UI;
 import gfx.Assets;
+import gfx.Audio;
 import gfx.Camera;
 import gfx.FontLoader;
 import input.KeyManager;
@@ -23,8 +23,12 @@ public class Game extends JPanel implements Runnable {
 	 //screen
     private JFrame frame;
     private String title = "Heavens's Gate";
-    //screen sizes 640x480,800x600,1366x768,1600x900,1920x1080
-    private int width = 800,height = 600;
+    
+    public int tileSize = 64;//game tile size
+    private int maxScreenCol = 13;
+    private int maxScreenRow = 10;
+    
+    private int width = tileSize*maxScreenCol,height = tileSize*maxScreenRow;
     private boolean running = false;
 
     //game loop
@@ -54,10 +58,8 @@ public class Game extends JPanel implements Runnable {
         frame = new JFrame();
         keyManager = new KeyManager(this);
         mouseManager = new MouseManager();
-        audio = new Audio();
         
-        
-        
+
         frame.add(this);
         frame.addMouseListener(mouseManager);
         frame.addMouseMotionListener(mouseManager);   
@@ -71,17 +73,20 @@ public class Game extends JPanel implements Runnable {
         frame.setTitle(title);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(width,height);
-        frame.setResizable(false);
+        frame.setResizable(true);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
         Assets.init();
        
         cam = new Camera(this,0,0);
+        audio = new Audio();
         gameState = new GameState(this);
         titleState = new TitleState(this);
         //sets the current state
-//        State.setState(titleState);
+        State.setState(titleState);
         State.setState(gameState);
+        
+       
         
     }
 
@@ -131,7 +136,6 @@ public class Game extends JPanel implements Runnable {
         }
     }
     public void update(){
-//    	keyManager.update();
     	if(State.getState() != null) 
 			State.getState().update();
     }
@@ -141,21 +145,8 @@ public class Game extends JPanel implements Runnable {
         super.paintComponent(g);
         if(State.getState() != null) 
 			State.getState().draw(g);
+      
         g.dispose();
-    }
-    
-    public void playMusic(String path) {
-    	audio.setFile(path);
-		audio.play();
-    	audio.loop();
-    }
- 
-    public void stopMusic() {
-    	audio.stop();
-    }
-    public void playSoundEffect(String path) {
-    	audio.setFile(path);
-    	audio.play();
     }
 
     public int getWidth() {

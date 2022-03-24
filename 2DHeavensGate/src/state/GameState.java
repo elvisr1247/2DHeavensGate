@@ -24,11 +24,13 @@ public class GameState extends State {
 		//sets the map and makes it usable everywhere
 		game.setMap(map);
 		
-//		 if(game.getGameState().getState() == game.gameState) {
+		
+		
+//		 if(game.gameState == game.getTitleState()) {
 //			 game.playMusic("res/Audio/smallAdventurers.wav");
-//		 }else {
-//			 game.stopMusic();
 //		 }
+//			 game.stopMusic();
+		 
 ////			 
 //		used to draw tiles 
 //		m.setTile(2,4, TileType.Brick);

@@ -29,13 +29,10 @@ public class Grass extends Entity{
 	public void draw(Graphics g) {
 		g.setColor(Color.yellow);
 		g.drawRect((int)x, (int)y, width, height);
-	
-		
-		
 	}
 	
 	 public boolean playerDetected() {
-			if(game.getMap().getPlayer().attackBounds.intersects(detecPlayer)) {
+			if(game.getMap().getEntityManager().getPlayer().attackBounds.intersects(detecPlayer)) {
 				return true;
 			}
 			return false;
@@ -44,8 +41,8 @@ public class Grass extends Entity{
 	@Override
 	public void die() {
 		setActiveEntity(false);
-		game.getMap().getItemManager().addItem(Item.key.createNew((int)x+15, (int)y+15));
-//		game.getMap().getItemManager().addItem(Item.ruppe.createNew((int)x+15, (int)y+15));
+//		game.getMap().getItemManager().addItem(Item.key.createNew((int)x+15, (int)y+15));
+		game.getMap().getItemManager().addItem(Item.ruppe.createNew((int)x+15, (int)y+15));
 		
 	}
 	

@@ -18,7 +18,7 @@ public class Skeleton extends Creature {
 	
 	
 	public Skeleton(Game game,float x, float y) {
-		super(game,x, y, 64, 64);
+		super(game,x, y, game.tileSize, game.tileSize);
 		//temp collision bounds
 		bounds = new Rectangle(22,38,19,25);  
 		maxBaseLife = 5;
@@ -51,7 +51,6 @@ public class Skeleton extends Creature {
 	}
 	
     public void draw(Graphics g) {
-    	
     	//draws collision box
       	g.setColor(Color.magenta);
       	g.drawRect((int)(x +bounds.x), (int)(y + bounds.y),bounds.width, bounds.height);
@@ -65,29 +64,16 @@ public class Skeleton extends Creature {
     }
     
     public boolean playerDetected() {
-		if(game.getMap().getPlayer().getBounds(0f, 0f).intersects(detecPlayer)) {
+		if(game.getMap().getEntityManager().getPlayer().getBounds(0f, 0f).intersects(detecPlayer)) {
 			return true;
 		}
 		return false;
 	}
     
-    
+     
     @Override
 	public void die() {
-//    	int rand = (int)Math.random()*3;
-//    	Random rand = new Random(); //instance of random class
-//        int upperbound = 2;
-//          //generate random values from 0-24
-//        int int_random = rand.nextInt(upperbound); 
-//    	
-//    	System.out.println(int_random);
-//    	if(int_random == 1) {
-//    		m.getItemManager().addItem(Item.grassSword.createNew((int)x, (int)y));
-//    	}else {
-    		//after sketelon dies rupe is droppeded
-    		game.getMap().getItemManager().addItem(Item.ruppe.createNew((int)x, (int)y));
-		
-		
+    		game.getMap().getItemManager().addItem(Item.grassSword.createNew((int)x, (int)y));
 	}
 
 	public Enemystates getStates() {

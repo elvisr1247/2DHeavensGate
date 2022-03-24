@@ -8,7 +8,9 @@ public enum TileType {
 	
 
 	Grass00(Assets.grass00,false),Grass01(Assets.grass01,false),
+	Water00(Assets.water00,true),Water01(Assets.watter01,true),
 	Brick(Assets.brick,true),Tree(Assets.treeTile,true);
+	
 
 	public BufferedImage img;
 	public boolean solid;

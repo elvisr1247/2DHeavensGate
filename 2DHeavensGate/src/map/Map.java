@@ -3,18 +3,18 @@ package map;
 import java.awt.Graphics;
 import java.util.ArrayList;
 
-import Audio.Audio;
 import Item.ItemManager;
 import UI.UI;
 import entitys.Entity;
-import entitys.Entity;
+import entitys.EntityManager;
 import entitys.Grass;
 import entitys.Player;
 import entitys.Skeleton;
+import entitys.Slime;
 import entitys.Tree;
 import entitys.npc;
+import gfx.Assets;
 import main.Game;
-import tiles.TileEditor;
 import tiles.TileType;
 import tiles.Tiles;
 
@@ -25,69 +25,63 @@ public class Map {
 	private int tileSize = 64;
 	public Tiles[][] map = new Tiles[width][height];
 	
-	private Player player;
 	private Skeleton skeleton;
 	private UI ui;
 
 	//world map
+	/* 0 = grass00,1 = grass01,2 = water00,3 = water01,
+	4 = tree, 5 = brick */
 	private int[][] level = {
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,3,0,1},
-			{0,1,0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,0,0},
-			{0,0,0,2,0,0,0,0,0,0,2,0,0,0,0,1,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,1,0,1,0,0,0,0,0,2,0,0,0,1,0,0,0,0,0,0,0,0},
-			{0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,3,0,0},
-			{0,0,2,0,1,0,0,1,0,2,0,1,0,0,0,0,0,0,0,0,0,0,3,0,0},
+			{2,3,2,2,2,2,2,2,2,2,2,2,3,3,2,2,2,2,2,2,2,2,2,2,3},
+			{2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2},
+			{2,2,2,2,3,2,2,2,0,0,1,0,0,0,2,2,2,3,2,2,2,2,2,2,2},
+			{3,2,2,2,2,2,2,2,4,0,1,0,1,4,2,2,2,2,2,2,3,2,2,2,2},
+			{4,4,4,4,4,4,4,4,4,0,0,0,0,4,4,4,4,4,4,4,4,4,4,4,4},
+			{0,0,1,0,1,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,1,0,0},
 			{0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,3,0,0},
-			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,1,0,0,0,3,0,0},
-			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0},
-			{0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,3,0,0},
-			{0,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0},
-			{0,0,0,0,0,0,0,0,0,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0}};
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0},
+			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,1,0,0,0,0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+			{0,0,0,0,0,0,0,0,0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0}};
 	
 	//used to draw and update all entities
-	private ArrayList<Entity> entites = new ArrayList<Entity>();
 	private ItemManager itemManager;
-	//TODO:fix and update tile editor
-	private TileEditor tileEditor;
+	private EntityManager entityManager;
+	
 	
 	private Grass grass;
 	
 	public Map(Game game) {
 		 this.game = game;
-		 
 		 grid();		
-		
 		 
+		 entityManager = new EntityManager(game);
 		 itemManager = new ItemManager(game);
-		 entites.add(skeleton = new Skeleton(game,250,220));
-		 entites.add(new npc(game,120,30));
-		 entites.add(new Tree(game,400,140,64*2,64*3));
-		 //temporary grass code
+		 entityManager.addEntity(new Skeleton(game,250,420));
+		 
+		 entityManager.addEntity(new Slime(game,200,420,32,32));
+		 entityManager.addEntity(new npc(game,120,420));
+		 entityManager.addEntity(new Tree(game,400,440,64*2,64*3));
+		 entityManager.addEntity(new Tree(game,600,440,64*2,64*3));
+//		 //temporary grass code
 		 for(int i = 250;i<442;i+=64) {
 			 for(int j = 612; j<740;j+=64) 
-				 entites.add(new Grass(game,i,j));
+				 entityManager.addEntity(new Grass(game,i,j));
 		 }
-		 entites.add(player = new Player(game,325,220));
-		 ui = new UI(game,player);
+		 ui = new UI(game,entityManager.getPlayer());
 		 
-//		 tileEditor = new TileEditor(game,this,player);
 	}
 	
 	public void update() {
 		ui.update();
 		itemManager.update();
-		//if entity is dead remove
-		for(int i = 0; i < entites.size();i++) {
-			Entity e = entites.get(i);
-			e.update();
-			if(!e.isActiveEntity() && !e.isUnkillableEntity()) {
-				entites.remove(e);
-			}
-		}
-		game.getCam().update(player);
-//		tileEditor.update();
+	
+		entityManager.update();
+		game.getCam().update(entityManager.getPlayer());
+
 	}
 	
 	public void Draw(Graphics g) {
@@ -105,15 +99,13 @@ public class Map {
 					Tiles t = map[i][j];
 					g.drawImage(t.getTexture(), t.getX(), t.getY(),
 						t.getWidth(), t.getHeight(), null);
-//					g.setColor(Color.DARK_GRAY);
-//					g.drawRect(i*64, j*64, 64, 64);
-
 			}
 		}
 		itemManager.draw(g);
 		//draws all the entity's
-		for(Entity e : entites)e.draw(g);
-//		tileEditor.draw(g);
+		entityManager.draw(g);
+		
+		g.drawImage(Assets.abc,120,120,64,64,null);
 		g.translate((int)game.getCam().getxOffset(),(int)game.getCam().getyOffset());
 		//keep last
 		ui.draw(g);
@@ -133,9 +125,15 @@ public class Map {
 					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Grass01);
 					break;
 				case 2:
-					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Tree);
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Water00);
 					break;
 				case 3:
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Water01);
+					break;
+				case 4:
+					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Tree);
+					break;
+				case 5:
 					map[i][j] = new Tiles(i*tileSize,j*tileSize,TileType.Brick);
 					break;
 				default:
@@ -157,13 +155,13 @@ public class Map {
 		return map[xCoord][yCoord];
 	}
 
-	public ArrayList<Entity> getE() {
-		return entites;
-	}
-
-	public void setE(ArrayList<Entity> c) {
-		this.entites = c;
-	}
+//	public ArrayList<Entity> getE() {
+//		return entites;
+//	}
+//
+//	public void setE(ArrayList<Entity> c) {
+//		this.entites = c;
+//	}
 
 	public int getWidth() {
 		return width;
@@ -181,13 +179,13 @@ public class Map {
 		this.height = height;
 	}
 
-	public ArrayList<Entity> getEntites() {
-		return entites;
-	}
-
-	public void setEntites(ArrayList<Entity> entites) {
-		this.entites = entites;
-	}
+//	public ArrayList<Entity> getEntites() {
+//		return entites;
+//	}
+//
+//	public void setEntites(ArrayList<Entity> entites) {
+//		this.entites = entites;
+//	}
 
 	public Game getGame() {
 		return game;
@@ -205,12 +203,12 @@ public class Map {
 		this.itemManager = itemManager;
 	}
 
-	public Player getPlayer() {
-		return player;
+	public EntityManager getEntityManager() {
+		return entityManager;
 	}
 
-	public void setPlayer(Player player) {
-		this.player = player;
+	public void setEntityManager(EntityManager entityManager) {
+		this.entityManager = entityManager;
 	}
 	
 	

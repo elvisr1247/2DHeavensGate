@@ -29,7 +29,6 @@ public class UI {
 	private static int FPS;
 	public static int commandNum = 0;
 	public static String dialodgeText = "";
-//	private static int windowWidth = game.getWidth();
 	private int row,col;
 	public static int slotCol = 0;
 	public static int slotRow = 0;
@@ -45,7 +44,6 @@ public class UI {
 	}
 	
 	public void update() {
-//		timer++;
 	}
 	
 	public void draw(Graphics g) {
@@ -103,8 +101,7 @@ public class UI {
 	private void keysCollected(Graphics g) {
 	g.setFont(Assets.font24); 
 	String keys = String.format("%03d", player.getKeys());
-	g.drawImage(Assets.keys[0],730,460,32,32,null);
-//	g.drawImage(Assets.keys[0],50,50,64,64,null);
+	g.drawImage(Assets.key,730,460,32,32,null);
 	g.drawString(keys, 690, 490);
 	
 }
@@ -145,64 +142,128 @@ public class UI {
 		final int size = 64;
 		final int frameX = size*3;
 		final int frameY = size;
-		final int frameWidth = size*6;
+		final int frameWidth = size*5;
 		final int frameHeight = size*5;
 		
-//		g.drawImage(Assets.GateBackground,
-//				0, 0, game.getWidth(),game.getHeight(), null);
 		g.setColor(new Color(0,0,0,100));
 		g.fillRect(0, 0, game.getWidth(), game.getHeight());
-		//player stats temp code
+		//Player Stats temporary code
 		drawSubWindow(g,size,size,size*2,size*2);
 		int locationX = (int) player.getX();
 		int locationY = (int) player.getY();
 		g.drawString(locationX+","+locationY, size+11, size+30);
-		//info window
-		drawSubWindow(g,size*3,size*6,size*6,size*2);
-		//item slot window
+		//Item Slot Window
 		drawSubWindow(g,frameX,frameY,frameWidth,frameHeight);
 		
 		//Slots
-		final int slotXstart = frameX-40;
-		final int slotYstart = frameY-40;
+		final int slotXstart = frameX + 20;
+		final int slotYstart = frameY + 20;
 		int slotX = slotXstart;
 		int slotY = slotYstart;
+		int slotSize = size -5;
 		
-		//cursor
+		//Draw Players Items
+		for(int i = 0;
+				i<game.getMap().getEntityManager().
+				getPlayer().inventory.size();i++) {
+			g.drawImage(game.getMap().getEntityManager().
+					getPlayer().inventory.get(i).getTexture(),slotX,slotY,null);
+			slotX += slotSize;
+			if(i == 4 || i == 9 || i == 14) {
+				slotX = slotXstart;
+				slotY +=slotSize;
+			}
+		}
+		
+		//Cursor
 		int cursorX = slotXstart + (size+slotCol);
 		int cursorY = slotYstart + (size+slotRow);
 		int cursorWidth = size;
 		int cursorHeight = size;
 		
-		//draw cursor
+		//Draw Cursor
 		g.setColor(Color.white);
 		Graphics2D g2 = (Graphics2D)g;
 		g2.setStroke(new BasicStroke(3));
 		g2.drawRoundRect(cursorX, cursorY, cursorWidth, cursorHeight,10,10);
 		
-		//cursor scroll
-		int translation = 10;
+		//Cursor Scroll
+		int translation = 5;
 		if(game.getKeyManager().pause
 				|| game.getKeyManager().inventory) {
 			if(game.getKeyManager().up) {
-				if(slotRow != 0)
+				if(slotRow != -60)
 				slotRow-=translation;
 			}
 			if(game.getKeyManager().down) {
-				if(slotRow != translation*21)
+				if(slotRow != translation*24)
 				slotRow+=translation;
 			}
 			if(game.getKeyManager().right) {
-				if(slotCol != translation*27)
-				slotCol+=10;
+				if(slotCol != translation*32)
+				slotCol+=translation;
 			}
 			if(game.getKeyManager().left) {
-				if(slotCol !=0)
+				if(slotCol !=-70)
 				slotCol-=translation;
+			}
+		}
+		//Description Frame
+		int dFrameX = frameX;
+		int dFrameY = frameY + frameHeight;
+		int dFrameWidth = frameWidth;
+		int dFrameHeight = size * 3;
+		drawSubWindow(g,dFrameX,dFrameY,dFrameWidth,dFrameHeight);
+		//Description Frame Text
+		int textX = dFrameX + 20;
+		int textY = dFrameY + size;
+		g.setFont(Assets.font16);
+		
+		int itemIndex = getItemIndexOnslot();
+		
+		if(itemIndex < game.getMap().getEntityManager().
+				getPlayer().inventory.size()) {
+			if(itemIndex != -1) {
+				//splits the item  text to the next line
+				for(String line : game.getMap().getEntityManager().
+						getPlayer().inventory.get(itemIndex).description.split("\n")) {
+					g.drawString(line, textX, textY);
+					textY +=10;
+				}
 			}
 		}
 		
 	}
+	
+	public static int getItemIndexOnslot() {
+		int itemIndex = slotCol +(slotRow*5);
+		//item slots
+		if(itemIndex == -370)return 0;
+		if(itemIndex == -315)return 1;
+		if(itemIndex == -255)return 2;
+		if(itemIndex == -195)return 3;
+		
+		if(itemIndex == -140)return 4;
+		if(itemIndex == -95)return 5;
+		if(itemIndex == -15)return 6;
+		if(itemIndex == -45)return 7;
+
+		if(itemIndex == 100)return 8;
+		if(itemIndex == 160)return 9;
+		if(itemIndex == 285)return 10;
+		if(itemIndex == 345)return 11;
+
+		if(itemIndex == 405)return 12;
+		if(itemIndex == 460)return 13;
+		if(itemIndex == 530)return 14;
+		if(itemIndex == 585)return 15;
+		
+		if(itemIndex == 645)return 16;
+		if(itemIndex == 710)return 17;
+		if(itemIndex == 760)return 18;
+		return -1;
+	}
+	
 	
 	private static void drawSubWindow(Graphics g,int x, int y, int width, int height) {
 		Color c = new Color(0,0,0,210);

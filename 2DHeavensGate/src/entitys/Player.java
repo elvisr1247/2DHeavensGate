@@ -3,9 +3,11 @@ package entitys;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import Item.Item;
+import gfx.Animation;
 import gfx.Assets;
 import main.Game;
 
@@ -25,45 +27,50 @@ public class Player extends Creature {
     private long lastAttackTimer,
     	attackCooldown = 500,attackTimer = attackCooldown;
   
-    private ArrayList<Item> inventory = new ArrayList<>();
+    public ArrayList<Item> inventory = new ArrayList<>();
     private final int inventorySize = 20;
+    private Animation animDown,animUp,animLeft,animRight;
+    public Item currentWeapon;
     
     public Player(Game game,float x, float y) {
-    	super(game,x, y,64,64);    
+    	super(game,x, y,game.tileSize,game.tileSize);    
     	bounds = new Rectangle(18,38,27,25);  
-     
         
         health = 3;
+        currentWeapon = Item.grassSword;
+        
+        
+        int animationSpeed = 0;
+        if(game.getKeyManager().run == true) animationSpeed = 10;
+        else animationSpeed = 100;
+        
+        animUp = new Animation(animationSpeed,Assets.playerUp);
+        animDown = new Animation(animationSpeed,Assets.playerDown);
+        animRight = new Animation(animationSpeed,Assets.playerRight);
+        animLeft = new Animation(animationSpeed,Assets.playerLeft);
+        setItems();
 	}
 
 	@Override
     public void update() {
-
        xMove = 0;
        yMove = 0;   
        
        getInput();
        move();  
-    	 
     } 
 	
 	@Override
 	public void draw(Graphics g) {
-//    	g.setColor(Color.white);
-//      	g.drawImage(Assets.player[0],(int)x,(int)y,width,height,null);
-      	
-      	
+		g.drawImage(getCurrentAnimationFrame(),(int)x+10,(int)y+25,42,42,null);
       	//draws collision box
-      	g.setColor(Color.magenta);
-      	g.drawRect((int)(x +bounds.x), (int)(y + bounds.y),bounds.width, bounds.height);
-      	
-      	g.setColor(Color.yellow);
-  
+//      	g.setColor(Color.magenta);
+//      	g.drawRect((int)(x +bounds.x), (int)(y + bounds.y),bounds.width, bounds.height);
       	hitBox(g);
-//      	attackCollisionBox(g);
 	}
 
 	private void getInput() {
+		
 	   	 if(game.getKeyManager().up){
 	           direction = "up";
 	           yMove -= speed;
@@ -83,13 +90,43 @@ public class Player extends Creature {
 
 	   	if(game.getKeyManager().attack)setAttackActive(true);
 	   	else setAttackActive(false);
+	   	
+	   	//animation
+	   	if(game.getKeyManager().up == true ||
+	    		   game.getKeyManager().down == true||
+	    		    game.getKeyManager().left == true|| 
+	    		     game.getKeyManager().right == true) {
+	   	 animUp.update();
+		 animDown.update();
+		 animRight.update();
+		 animLeft.update();
+	   
+		}
+	}
+	public void setItems() {
+//		inventory.add(currentWeapon);
+	}
+	private BufferedImage getCurrentAnimationFrame() {
+		
+		if(xMove < 0) {//leftanimation
+			return animLeft.getCurrentFrame();
+		}else if(xMove > 0) {//right animation
+			return animRight.getCurrentFrame();
+		}else if(yMove < 0) {//up animation
+			return animUp.getCurrentFrame();
+		}else{//down animation
+			return animDown.getCurrentFrame();
+		}
 	}
 	
 	private void hitBox(Graphics g) {
+		g.setColor(Color.yellow);
 		attackTimer += System.currentTimeMillis() - lastAttackTimer;
 		lastAttackTimer = System.currentTimeMillis();
 		if(attackTimer < attackCooldown)
 			return;
+		
+		if(game.getKeyManager().inventory)return;
 		
 		if(isAttackActive()) {
 			switch(direction) {
@@ -108,12 +145,11 @@ public class Player extends Creature {
 				default:
 					attackBounds = new Rectangle((int)x+50,(int)y+30,16,32);
 					break;
-				
 			}
 			attackTimer = 0;
 			g.drawRect((int)attackBounds.x,(int)attackBounds.y,attackBounds.width,attackBounds.height);
 			
-			for(Entity entites : game.getMap().getEntites()) {
+			for(Entity entites : game.getMap().getEntityManager().getEntities()) {
 				//if entity doesnt equal its self do this
 				if(entites.equals(this))continue;
 				if(entites.getBounds(0, 0).intersects(attackBounds)) {

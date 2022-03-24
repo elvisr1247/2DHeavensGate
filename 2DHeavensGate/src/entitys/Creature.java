@@ -33,17 +33,17 @@ public class Creature extends Entity {
 	  public void moveX() {
 		  int tx;
 		  if(xMove > 0) {//right movement
-			  tx  = (int)(x + xMove + bounds.x + bounds.width)/64;
-			  if(!collisionWithTile(tx,(int)(y + bounds.y)/64)&&
-					  !collisionWithTile(tx,(int)(y + bounds.y + bounds.height)/64))
+			  tx  = (int)(x + xMove + bounds.x + bounds.width)/game.tileSize;
+			  if(!collisionWithTile(tx,(int)(y + bounds.y)/game.tileSize)&&
+					  !collisionWithTile(tx,(int)(y + bounds.y + bounds.height)/game.tileSize))
 	              x += xMove;
-			  else x = tx * 64 - bounds.x - bounds.width - 2;
+			  else x = (float) (tx * game.tileSize - bounds.x - bounds.width - 0.1);
 		  }else  if(xMove < 0){//left movement
-			  tx = (int)(x+ xMove + bounds.x)/64;
-			  if(!collisionWithTile(tx,(int)(y+bounds.y)/64)&&
-					  !collisionWithTile(tx,(int)(y+bounds.y+bounds.height)/64))
+			  tx = (int)(x+ xMove + bounds.x)/game.tileSize;
+			  if(!collisionWithTile(tx,(int)(y+bounds.y)/game.tileSize)&&
+					  !collisionWithTile(tx,(int)(y+bounds.y+bounds.height)/game.tileSize))
 			  		x+=xMove;
-			  else x = tx * 64 + 64 - bounds.x;
+			  else x = tx * game.tileSize + game.tileSize - bounds.x;
 		  }
 		 
 	  }
@@ -51,17 +51,17 @@ public class Creature extends Entity {
 	  public void moveY() {
 		 int ty;
 	  	 if(yMove > 0) {//top movement
-	  		  ty = (int)(y + yMove + bounds.y+bounds.height)/64;
-	  		 if(!collisionWithTile((int)(x+bounds.x)/64,ty)&&
-	  				 !collisionWithTile((int)(x+bounds.x+bounds.width)/64,ty))
+	  		  ty = (int)(y + yMove + bounds.y+bounds.height)/game.tileSize;
+	  		 if(!collisionWithTile((int)(x+bounds.x)/game.tileSize,ty)&&
+	  				 !collisionWithTile((int)(x+bounds.x+bounds.width)/game.tileSize,ty))
 	  			 y+=yMove;
-	  		 else y = ty * 64 - bounds.y - bounds.height - 2;
+	  		 else y = (float) (ty * game.tileSize - bounds.y - bounds.height - 0.1);
 		  }else  if(yMove < 0){//down movement  
-			  ty = (int)(y + yMove + bounds.y)/64;
-		  		 if(!collisionWithTile((int)(x+bounds.x)/64,ty)&&
-		  				 !collisionWithTile((int)(x+bounds.x+bounds.width)/64,ty)) {
+			  ty = (int)(y + yMove + bounds.y)/game.tileSize;
+		  		 if(!collisionWithTile((int)(x+bounds.x)/game.tileSize,ty)&&
+		  				 !collisionWithTile((int)(x+bounds.x+bounds.width)/game.tileSize,ty)) {
 		  			 y+=yMove;
-		  		 }else y = ty * 64 + 64 - bounds.y;
+		  		 }else y = ty * game.tileSize + game.tileSize - bounds.y;
 		  }
 	
 	  }
@@ -80,7 +80,7 @@ public class Creature extends Entity {
 
 	//x & y offset used to return a react
 	public boolean collisionWithEntity(float xOffset,float yOffset) {
-		for(Entity c : game.getMap().getE()) {
+		for(Entity c : game.getMap().getEntityManager().getEntities()) {
 			//skips to the next entity and check other entity's doesn't check the same entity twice
 			if(c.equals(this))
 				continue;

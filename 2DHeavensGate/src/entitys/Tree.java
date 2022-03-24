@@ -9,7 +9,7 @@ import main.Game;
 public class Tree extends Creature{
 
 	public Tree(Game game, float x, float y, int width, int height) {
-		super(game,x, y, width, height);
+		super(game,x, y, 150, 200);
 		bounds = new Rectangle(50,150,30,40);
 	}
 	

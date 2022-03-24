@@ -10,16 +10,8 @@ import map.Map;
 public class Tiles {
 		
 		public BufferedImage texture;
-		public int x;
-
-		public int y;
-
-		public int width;
-
-		public int height;
-		
+		public int x,y,width,height,tileSize = 64;
 		public TileType type;
-		
 		public boolean solid = false;
 		
 		public Tiles() {
@@ -30,8 +22,8 @@ public class Tiles {
 			
 			this.x = x;
 			this.y = y;
-			this.width = 64;
-			this.height = 64;
+			this.width = tileSize;
+			this.height = tileSize;
 			this.type = type;
 			this.texture = type.img;
 			solid = type.isSolid();
